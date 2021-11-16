@@ -1,60 +1,32 @@
 package com.spring.spring.modelo;
 
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="usuarios")
+@ToString @EqualsAndHashCode
 public class Usuario {
 
-    private String nombre;
-    private String apellido;
-    private String email;
-    private String telefono;
-    private String pasword;
+    @Id
+    @Getter @Setter @Column(name ="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Getter @Setter @Column(name ="nombre")
+    private String nombre;
+    @Getter @Setter @Column(name ="apellido")
+    private String apellido;
+    @Getter @Setter @Column(name ="email")
+    private String email;
+    @Getter @Setter @Column(name ="telefono")
+    private String telefono;
+    @Getter @Setter @Column(name ="password")
+    private String pasword;
 
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getPasword() {
-        return pasword;
-    }
-
-    public void setPasword(String pasword) {
-        this.pasword = pasword;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 }

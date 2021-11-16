@@ -2,9 +2,10 @@ package com.spring.spring.controller;
 
 
 import com.spring.spring.modelo.Usuario;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.spring.spring.dao.UsuarioDao;
+import com.spring.spring.util.JWTUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,52 +13,42 @@ import java.util.List;
 @RestController
 public class UsuarioController {
 
-@RequestMapping(value = "usuario{id}")
-public Usuario prueba (@PathVariable long id)
-{
-Usuario user = new Usuario();
-    user.setNombre("lucas");
-    user.setApellido("rozo");
-    user.setEmail("lucas@rozo.com");
-    user.setPasword("1234");
-    user.setTelefono("1234");
-    user.setId(id);
-    return user;
-}
+    @Autowired
+    private UsuarioDao usuariodao;
 
-    @RequestMapping(value = "usuarioa")
-    public Usuario editar ()
-    {
-        Usuario user = new Usuario();
-        user.setNombre("lucas");
-        user.setApellido("rozo");
-        user.setEmail("lucas@rozo.com");
-        user.setPasword("1234");
-        user.setTelefono("1234");
-        return user;
+    @Autowired
+    JWTUtil jwtUtil;
+
+    @RequestMapping(value = "api/usuarios")
+    public List<Usuario> GetUsuarios(@RequestHeader(value = "autorizacion") String token) {
+
+        if(validartoken(token)){
+            return usuariodao.getUsuarios();
+        }
+        return new ArrayList<>();
     }
 
-    @RequestMapping(value = "usuarios")
-    public Usuario eliminar ()
-    {
-        Usuario user = new Usuario();
-        user.setNombre("lucas");
-        user.setApellido("rozo");
-        user.setEmail("lucas@rozo.com");
-        user.setPasword("1234");
-        user.setTelefono("1234");
-        return user;
+    private boolean validartoken(String token){
+
+        String usuarioid = jwtUtil.getKey(token);
+        if(usuarioid==null){
+            return false;
+        }
+        return true;
     }
 
-    @RequestMapping(value = "usuariod")
-    public Usuario buscar ()
-    {
-        Usuario user = new Usuario();
-        user.setNombre("lucas");
-        user.setApellido("rozo");
-        user.setEmail("lucas@rozo.com");
-        user.setPasword("1234");
-        user.setTelefono("1234");
-        return user;
+    @RequestMapping(value = "api/usuarios/{id}", method = RequestMethod.DELETE)
+    public void DeleteUsuarios(@RequestHeader(value = "autorizacion") String token,
+                               @PathVariable Long id) {
+
+       if(validartoken(token)){
+           usuariodao.eliminar(id);
+       }
     }
+
+    @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
+    public void CrearUsuario(@RequestBody Usuario usuario) {
+        usuariodao.crear(usuario);
+    }
+
 }
